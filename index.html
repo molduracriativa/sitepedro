@@ -3,143 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Convite Interativo</title>
+<title>Convite Pedro</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-  background:#000;
-  overflow:hidden;
-  font-family:Arial, sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.page{
-  position:fixed;
-  inset:0;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .7s ease;
+body {
+  background: #000;
+  overflow: hidden;
 }
 
-.page.active{
-  opacity:1;
-  pointer-events:auto;
+.page {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 }
 
 .page img,
-.page video{
-  width:100%;
-  height:100%;
-  object-fit:contain;
+.page video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* ÁREAS DE CLIQUE */
-.hotspot{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  width:260px;
-  height:60px;
-  cursor:pointer;
+/* BOTÕES INVISÍVEIS */
+.hotspot {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
 }
 
-/* BOTÃO X */
-.close-btn{
-  position:absolute;
-  top:20px;
-  right:20px;
-  width:44px;
-  height:44px;
-  background:rgba(0,0,0,.6);
-  border-radius:50%;
-  color:#fff;
-  font-size:26px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
+/* BOTÃO VOLTAR */
+.btn-voltar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 ÁUDIO -->
-<audio id="music" loop>
-  <source src="audio.mp3" type="audio/mpeg">
-</audio>
+<audio id="musica" src="audio.mp3" loop></audio>
 
-<!-- ================= PÁGINA 1 ================= -->
-<div id="page1" class="page active">
-  <img src="capa.png">
-  <div class="hotspot"
-       style="top:0;width:100%;height:100%"
-       onclick="startInvite()"></div>
+<!-- PÁGINA 1 -->
+<div class="page" id="page1" style="display:block;">
+  <img src="pagina1.png">
+  <div class="hotspot" style="top:0;left:0;width:100%;height:100%;" onclick="startInvite()"></div>
 </div>
 
-<!-- ================= PÁGINA 2 ================= -->
-<div id="page2" class="page">
-  <video id="video" muted playsinline>
-    <source src="video.mp4" type="video/mp4">
-  </video>
+<!-- PÁGINA 2 -->
+<div class="page" id="page2">
+  <video id="video" src="pagina2.mp4"></video>
 </div>
 
-<!-- ================= PÁGINA 3 ================= -->
-<div id="page3" class="page">
+<!-- PÁGINA 3 -->
+<div class="page" id="page3">
   <img src="pagina3.jpg">
 
-  <!-- BOTÃO 1 -->
-  <div class="hotspot"
-       style="top:70%"
-       onclick="openRSVP()"></div>
+  <!-- BOTÃO 1 – CONFIRMAR PRESENÇA -->
+  <!-- EDITE SEU NÚMERO AQUI -->
+  <a class="hotspot"
+     style="bottom:14%; left:20%;"
+     href="https://wa.me/5571993233142"
+     target="_blank"></a>
 
-  <!-- BOTÃO 2 -->
-  <div class="hotspot"
-       style="top:80%"
-       onclick="openMap()"></div>
+  <!-- BOTÃO 2 – LOCALIZAÇÃO -->
+  <!-- EDITE SEU LINK DO MAPS AQUI -->
+  <a class="hotspot"
+     style="bottom:14%; left:42%;"
+     href="https://maps.app.goo.gl/NfnZSmunPgMdWMoy5"
+     target="_blank"></a>
 
-  <!-- BOTÃO 3 -->
+  <!-- BOTÃO 3 – SUGESTÃO DE PRESENTE -->
   <div class="hotspot"
-       style="top:90%"
+       style="bottom:14%; left:64%;"
        onclick="goPage(4)"></div>
 </div>
 
-<!-- ================= PÁGINA 4 ================= -->
-<div id="page4" class="page">
+<!-- PÁGINA 4 -->
+<div class="page" id="page4">
   <img src="pagina4.jpg">
-  <div class="close-btn" onclick="goPage(3)">×</div>
+
+  <!-- BOTÃO VOLTAR -->
+  <div class="btn-voltar" onclick="goPage(3)"></div>
 </div>
 
 <script>
-function goPage(n){
-  document.querySelectorAll('.page')
-    .forEach(p=>p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
-}
+const musica = document.getElementById('musica');
+const video = document.getElementById('video');
 
-function startInvite(){
-  document.getElementById('music').play().catch(()=>{});
+function startInvite() {
+  musica.play();
   goPage(2);
-  const v=document.getElementById('video');
-  setTimeout(()=>v.play().catch(()=>{}),200);
-  v.onended=()=>goPage(3);
+  video.play();
+
+  video.onended = () => {
+    goPage(3);
+  };
 }
 
-/* ===== LINKS EDITÁVEIS ===== */
-
-function openRSVP(){
-  window.open(
-    "https://wa.me/5571993233142?text=Confirmo%20presença",
-    "_blank"
-  );
-}
-
-function openMap(){
-  window.open(
-    "https://maps.app.goo.gl/NfnZSmunPgMdWMoy5",
-    "_blank"
-  );
+function goPage(num) {
+  document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+  document.getElementById('page' + num).style.display = 'block';
 }
 </script>
 
