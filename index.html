@@ -6,115 +6,172 @@
 <title>Convite Interativo</title>
 
 <style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-        background: #000;
-    }
+*{margin:0;padding:0;box-sizing:border-box}
 
-    .page {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        display: none;
-        opacity: 0;
-        transition: opacity 0.6s ease;
-        background: #000;
-    }
+body{
+  background:#000;
+  overflow:hidden;
+  font-family:Arial, sans-serif;
+}
 
-    .active {
-        display: block;
-        opacity: 1;
-    }
+.page{
+  position:fixed;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .8s ease;
+}
 
-    .btn {
-        position: absolute;
-        padding: 14px 24px;
-        background: #c0134f;
-        border: none;
-        border-radius: 12px;
-        color: #fff;
-        font-size: 18px;
-        cursor: pointer;
-        z-index: 10;
-    }
+.page.active{
+  opacity:1;
+  pointer-events:auto;
+}
 
-    .btn:hover {
-        background: #e01f61;
-    }
+.page img,
+.page video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
 
-    img, iframe, embed, video {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+/* ÁREAS CLICÁVEIS INVISÍVEIS */
+.hotspot{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width:260px;        /* largura do botão */
+  height:60px;        /* altura do botão */
+  cursor:pointer;
+}
+
+/* BOTÃO FECHAR (X) */
+.close-btn{
+  position:absolute;
+  top:20px;
+  right:20px;
+  width:46px;
+  height:46px;
+  background:rgba(0,0,0,.6);
+  border-radius:50%;
+  color:#fff;
+  font-size:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<!-- Música global -->
-<audio id="bgMusic" autoplay loop>
-    <source src="audio.mp3" type="audio/mp3">
+<!-- ======================================
+     ÁUDIO (INICIA APÓS CLIQUE NA CAPA)
+====================================== -->
+<audio id="music" loop>
+  <source src="audio.mp3" type="audio/mpeg">
 </audio>
 
+<!-- ======================================
+     PÁGINA 1 - CAPA
+====================================== -->
+<div id="page1" class="page active">
+  <img src="pagina1.png">
+
+  <!-- Tela inteira clicável -->
+  <div class="hotspot"
+       style="top:0;width:100%;height:100%"
+       onclick="startInvite()"></div>
+</div>
+
+<!-- ======================================
+     PÁGINA 2 - VÍDEO
+====================================== -->
+<div id="page2" class="page">
+  <video id="video" muted playsinline>
+    <source src="pagina2.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- ======================================
+     PÁGINA 3 - CONVITE COM BOTÕES
+====================================== -->
+<div id="page3" class="page">
+  <img src="pagina3.jpg">
+
+  <!-- BOTÃO 1 - CONFIRMAR PRESENÇA (RSVP)
+       👉 ALTERE O LINK ABAIXO
+  -->
+  <div class="hotspot"
+       style="top:72%"
+       onclick="openRSVP()"></div>
+
+  <!-- BOTÃO 2 - LOCALIZAÇÃO
+       👉 ALTERE O LINK DO GOOGLE MAPS
+  -->
+  <div class="hotspot"
+       style="top:calc(72% + 80px)"
+       onclick="openMap()"></div>
+
+  <!-- BOTÃO 3 - SUGESTÃO DE PRESENTES
+       👉 ABRE A PÁGINA 4
+  -->
+  <div class="hotspot"
+       style="top:calc(72% + 160px)"
+       onclick="goPage(4)"></div>
+</div>
+
+<!-- ======================================
+     PÁGINA 4 - SUGESTÃO DE PRESENTES
+====================================== -->
+<div id="page4" class="page">
+  <img src="pagina4.jpg">
+
+  <!-- BOTÃO X - VOLTAR PARA PÁGINA 3 -->
+  <div class="close-btn" onclick="goPage(3)">×</div>
+</div>
+
 <script>
-// Troca de páginas com fade suave
-function goToPage(num) {
-    document.querySelectorAll(".page").forEach(p => {
-        p.classList.remove("active");
-    });
-    document.getElementById("page" + num).classList.add("active");
+/* CONTROLE DE PÁGINAS */
+function goPage(n){
+  document.querySelectorAll('.page')
+    .forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+}
+
+/* INÍCIO DO CONVITE */
+function startInvite(){
+  const audio=document.getElementById('music');
+  audio.play().catch(()=>{});
+
+  goPage(2);
+
+  const v=document.getElementById('video');
+  setTimeout(()=>v.play().catch(()=>{}),200);
+
+  v.onended=()=>goPage(3);
+}
+
+/* ============================
+   LINKS PERSONALIZÁVEIS
+============================ */
+
+/* 👉 CONFIRMAR PRESENÇA */
+function openRSVP(){
+  window.open(
+    "https://wa.me/5599999999999?text=Confirmo%20presença",
+    "_blank"
+  );
+}
+
+/* 👉 LOCALIZAÇÃO GOOGLE MAPS */
+function openMap(){
+  window.open(
+    "https://www.google.com/maps?q=Rua+Alegre+12",
+    "_blank"
+  );
 }
 </script>
-
-<!-- ================================================= -->
-<!--                    PÁGINA 1                       -->
-<!-- ================================================= -->
-<div id="page1" class="page active">
-    <img src="capa.png" alt="Capa do Convite">
-
-    <button class="btn" style="bottom: 40px; right: 40px;"
-            onclick="goToPage(2)">
-        Abrir Página 2
-    </button>
-</div>
-
-<!-- ================================================= -->
-<!--                    PÁGINA 2                       -->
-<!-- ================================================= -->
-<div id="page2" class="page">
-    <video autoplay onended="goToPage(3)">
-        <source src="video.mp4" type="video/mp4">
-    </video>
-</div>
-
-<!-- ================================================= -->
-<!--                    PÁGINA 3                       -->
-<!-- ================================================= -->
-<div id="page3" class="page">
-    <embed src="pagina3.pdf" type="application/pdf">
-
-    <button class="btn" style="bottom: 30px; left: 30px;"
-            onclick="goToPage(4)">
-        Ir para Página 4
-    </button>
-</div>
-
-<!-- ================================================= -->
-<!--                    PÁGINA 4                       -->
-<!-- ================================================= -->
-<div id="page4" class="page">
-    <embed src="pagina4.pdf" type="application/pdf">
-
-    <button class="btn" style="bottom: 30px; right: 30px;"
-            onclick="goToPage(3)">
-        Voltar para Página 3
-    </button>
-</div>
 
 </body>
 </html>
