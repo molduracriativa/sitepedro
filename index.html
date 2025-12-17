@@ -19,7 +19,7 @@ body{
   inset:0;
   opacity:0;
   pointer-events:none;
-  transition:opacity .8s ease;
+  transition:opacity .7s ease;
 }
 
 .page.active{
@@ -34,7 +34,7 @@ body{
   object-fit:contain;
 }
 
-/* ÁREAS INVISÍVEIS DOS BOTÕES */
+/* ÁREAS DE CLIQUE */
 .hotspot{
   position:absolute;
   left:50%;
@@ -44,13 +44,13 @@ body{
   cursor:pointer;
 }
 
-/* BOTÃO FECHAR (X) */
+/* BOTÃO X */
 .close-btn{
   position:absolute;
   top:20px;
   right:20px;
-  width:46px;
-  height:46px;
+  width:44px;
+  height:44px;
   background:rgba(0,0,0,.6);
   border-radius:50%;
   color:#fff;
@@ -70,91 +70,74 @@ body{
   <source src="audio.mp3" type="audio/mpeg">
 </audio>
 
-<!-- =========================
-     PÁGINA 1 - CAPA
-========================= -->
+<!-- ================= PÁGINA 1 ================= -->
 <div id="page1" class="page active">
-  <img src="pagina1.png">
+  <img src="capa.png">
   <div class="hotspot"
        style="top:0;width:100%;height:100%"
        onclick="startInvite()"></div>
 </div>
 
-<!-- =========================
-     PÁGINA 2 - VÍDEO
-========================= -->
+<!-- ================= PÁGINA 2 ================= -->
 <div id="page2" class="page">
   <video id="video" muted playsinline>
-    <source src="pagina2.mp4" type="video/mp4">
+    <source src="video.mp4" type="video/mp4">
   </video>
 </div>
 
-<!-- =========================
-     PÁGINA 3 - BOTÕES
-========================= -->
+<!-- ================= PÁGINA 3 ================= -->
 <div id="page3" class="page">
   <img src="pagina3.jpg">
 
-  <!-- BOTÃO 1 - CONFIRMAR PRESENÇA (WHATSAPP) -->
+  <!-- BOTÃO 1 -->
   <div class="hotspot"
-       style="top:72%"
+       style="top:70%"
        onclick="openRSVP()"></div>
 
-  <!-- BOTÃO 2 - LOCALIZAÇÃO (GOOGLE MAPS) -->
+  <!-- BOTÃO 2 -->
   <div class="hotspot"
-       style="top:calc(72% + 80px)"
+       style="top:80%"
        onclick="openMap()"></div>
 
-  <!-- BOTÃO 3 - SUGESTÃO DE PRESENTES (PÁGINA 4) -->
+  <!-- BOTÃO 3 -->
   <div class="hotspot"
-       style="top:calc(72% + 160px)"
+       style="top:90%"
        onclick="goPage(4)"></div>
 </div>
 
-<!-- =========================
-     PÁGINA 4 - PRESENTES
-========================= -->
+<!-- ================= PÁGINA 4 ================= -->
 <div id="page4" class="page">
   <img src="pagina4.jpg">
   <div class="close-btn" onclick="goPage(3)">×</div>
 </div>
 
 <script>
-/* CONTROLE DE PÁGINAS */
 function goPage(n){
   document.querySelectorAll('.page')
     .forEach(p=>p.classList.remove('active'));
   document.getElementById('page'+n).classList.add('active');
 }
 
-/* INÍCIO */
 function startInvite(){
-  const audio=document.getElementById('music');
-  audio.play().catch(()=>{});
-
+  document.getElementById('music').play().catch(()=>{});
   goPage(2);
-
   const v=document.getElementById('video');
   setTimeout(()=>v.play().catch(()=>{}),200);
   v.onended=()=>goPage(3);
 }
 
-/* ===========================
-   🔧 LINKS EDITÁVEIS
-=========================== */
+/* ===== LINKS EDITÁVEIS ===== */
 
-/* 👉 CONFIRMAR PRESENÇA (ALTERE PARA OUTRO CLIENTE) */
 function openRSVP(){
   window.open(
-    "https://wa.me/5571993233142?text=Confirmo%20presença%20na%20festa",
+    "https://wa.me/5571993233142?text=Confirmo%20presença",
     "_blank"
   );
 }
 
-/* 👉 LOCALIZAÇÃO (ALTERE PARA OUTRO CLIENTE) */
 function openMap(){
   window.open(
-    "https://maps.app.goo.gl/https://maps.app.goo.gl/NfnZSmunPgMdWMoy5",
+    "https://maps.app.goo.gl/NfnZSmunPgMdWMoy5",
     "_blank"
   );
 }
@@ -162,4 +145,3 @@ function openMap(){
 
 </body>
 </html>
-
